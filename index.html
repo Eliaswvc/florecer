@@ -5,37 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Florecer| Seguimiento del ciclo</title>
   <style>
-    /* ====== Diseño base con variables para temas ====== */
-    :root {
-      --bg: #f7f8fb;            /* fondo principal claro */
-      --panel: #ffffff;         /* tarjetas */
-      --text: #b488b4;          /* texto base (gris 800) */
-      --muted: #6b7280;         /* texto secundario */
-      --primary: #E29ADF;       /* acento profesional */
-      --primary-contrast: #ffffff;
-      --accent: #f43f5e;        /* rojo/rosa para días de periodo */
-      --accent-2: #10b981;      /* verde para ovulación */
-      --ring: rgba(179, 112, 159, 0.25);
-      --border: #e5e7eb;
-      --shadow: 0 10px 25px rgba(16, 24, 40, 0.08);
-      --chip: #eef2ff;
-      --chip-text: #c564b0;
-    }
-    [data-theme="dark"] {
-      --bg: #0b1020;            /* azul marino muy oscuro */
-      --panel: #121831;         /* panel oscuro azulado */
-      --text: #e5e7eb;          /* texto claro */
-      --muted: #a1a8b8;         /* texto secundario */
-      --primary: #8b7bff;       /* acento más luminoso */
-      --primary-contrast: #111827;
-      --accent: #fb7185;        /* rosa claro para contraste */
-      --accent-2: #34d399;      /* verde para ovulación */
-      --ring: rgba(139, 123, 255, 0.35);
-      --border: #1f2a44;
-      --shadow: 0 10px 25px rgba(2, 6, 23, 0.6);
-      --chip: #1f2442;
-      --chip-text: #c7d2fe;
-    }
+/* ====== Diseño base con variables para temas femeninos ====== */
+:root {
+  --bg: #fff0f8;            /* fondo principal rosa muy suave */
+  --panel: #ffffff;         /* tarjetas */
+  --text: #a44c82;          /* texto base (rosa-vino) */
+  --muted: #9a7fa5;         /* texto secundario (lila apagado) */
+  --primary: #e87ab2;       /* rosa vibrante femenino */
+  --primary-contrast: #ffffff;
+  --accent: #ff4d88;        /* rosa fuerte (periodo) */
+  --accent-2: #ff9ecf;      /* rosa pastel para ovulación */
+  --ring: rgba(232, 122, 178, 0.3);
+  --border: #f5cfe0;
+  --shadow: 0 10px 25px rgba(230, 60, 120, 0.1);
+  --chip: #ffe0f0;
+  --chip-text: #c94f8a;
+}
+
+[data-theme="dark"] {
+  --bg: #1b0b17;            /* fondo vino muy oscuro */
+  --panel: #2a1524;         /* panel rosado oscuro */
+  --text: #f6d9ea;          /* texto claro rosado */
+  --muted: #d6a8c6;         /* texto secundario lila claro */
+  --primary: #ff7ab8;       /* rosa neón suave */
+  --primary-contrast: #2a1524;
+  --accent: #ff5c8a;        /* rosa fuerte brillante */
+  --accent-2: #ffb3d9;      /* rosa pastel claro */
+  --ring: rgba(255, 122, 184, 0.35);
+  --border: #442133;
+  --shadow: 0 10px 25px rgba(255, 105, 180, 0.25);
+  --chip: #3d2033;
+  --chip-text: #ffbdd6;
+}
+
     
 
     * { box-sizing: border-box; }
@@ -136,6 +138,42 @@
     font-size: .8rem; 
     color: var(--muted); 
 }
+/* Animaciones generales para todos los botones */
+button {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+/* Al pasar el mouse */
+button:hover {
+  transform: scale(1.08);          /* crece un poco */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Al hacer clic */
+button:active {
+  transform: scale(0.95);          /* se encoge un poco */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Animación suave de color (modo claro y oscuro) */
+button {
+  background-color: var(--btn-bg, #4a90e2);
+  color: var(--btn-text, #fff);
+}
+
+/* Puedes definir diferentes estilos según el modo */
+body.light button {
+  --btn-bg: #4a90e2;
+  --btn-text: #fff;
+}
+
+body.dark button {
+  --btn-bg: #222;
+  --btn-text: #f0f0f0;
+}
 
 /* Cada día */
 .day { 
@@ -159,19 +197,19 @@
 .day.period::after {
     content: "🩸";  /* periodo */
     position: absolute;
-    font-size: 18px;
+    font-size: 13px;
 }
 
 .day.fertile::after {
     content: "🌱";  /* días fértiles */
     position: absolute;
-    font-size: 18px;
+    font-size: 13px;
 }
 
 .day.ovulation::after {
     content: "🌸";  /* ovulación */
     position: absolute;
-    font-size: 18px;
+    font-size: 13px;
 }
 
 /* Leyenda */
@@ -390,44 +428,126 @@
       </section>
 
       <!-- FLUJOS -->
-      <section class="grid view" id="view-flujos" style="display:none;">
-        <div class="card span-12">
-          <h3>Guía visual de flujos y colores</h3>
-          <p class="helper">Ejemplos ilustrativos (no fotos reales). Si notas olor fuerte, coágulos muy grandes o cambios bruscos, consulta con un profesional.</p>
-          <div class="grid">
-            <div class="card span-4">
-              <h4>Ligero</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #fde2e7, #f9c8d2);"></div>
-              <p class="helper">Color rosado/rojo claro, manchado leve. Suele aparecer al inicio o final del periodo.</p>
-            </div>
-            <div class="card span-4">
-              <h4>Moderado</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #f8a1b1, #e85a77);"></div>
-              <p class="helper">Rojo brillante, flujo constante. Cambia compresas/tampones cada 3–4 h según necesidad.</p>
-            </div>
-            <div class="card span-4">
-              <h4>Abundante</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #c01f3d, #7a0d1f);"></div>
-              <p class="helper">Rojo oscuro con posibles coágulos. Si empapas cada hora o tienes mareos, busca atención médica.</p>
-            </div>
-            <div class="card span-4">
-              <h4>Marrón</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #b08968, #6c4a3a);"></div>
-              <p class="helper">Sangre vieja oxidada, común al principio o al final del periodo.</p>
-            </div>
-            <div class="card span-4">
-              <h4>Naranja / Amarillento</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #ffcc80, #ff8c42);"></div>
-              <p class="helper">Puede mezclarse con flujo cervical. Si hay mal olor/ardor, consulta.</p>
-            </div>
-            <div class="card span-4">
-              <h4>Grisáceo</h4>
-              <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #cfd8dc, #90a4ae);"></div>
-              <p class="helper">No es habitual. Podría ser signo de infección: busca valoración profesional.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+<!-- ====== Sección de flujos ====== -->
+<section class="grid view" id="view-flujos" style="display:none;">
+  <div class="card span-12">
+    <h3>Guía visual de flujos y colores</h3>
+    <p class="helper">
+      Ejemplos ilustrativos (no fotos reales). Si notas olor fuerte, coágulos muy grandes o cambios bruscos, consulta con un profesional.
+    </p>
+    
+    <div class="grid">
+      <!-- Cada tarjeta con botón para abrir modal -->
+      <div class="card span-4 flujo-card" data-flujo="Ligero" data-info="Color rosado/rojo claro, manchado leve. Suele aparecer al inicio o final del periodo." data-img="img/ligero.jpg">
+        <h4>Ligero</h4>
+        <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #fde2e7, #f9c8d2);"></div>
+        <p class="helper">Color rosado/rojo claro, manchado leve.</p>
+      </div>
+
+      <div class="card span-4 flujo-card" data-flujo="Moderado" data-info="Rojo brillante, flujo constante. Cambia compresas/tampones cada 3–4 h según necesidad." data-img="img/moderado.jpg">
+        <h4>Moderado</h4>
+        <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #f8a1b1, #e85a77);"></div>
+        <p class="helper">Rojo brillante, flujo constante.</p>
+      </div>
+
+      <div class="card span-4 flujo-card" data-flujo="Abundante" data-info="Rojo oscuro con posibles coágulos. Si empapas cada hora o tienes mareos, busca atención médica." data-img="img/abundante.jpg">
+        <h4>Abundante</h4>
+        <div style="height:120px; border-radius:12px; background: linear-gradient(180deg, #c01f3d, #7a0d1f);"></div>
+        <p class="helper">Rojo oscuro con posibles coágulos.</p>
+      </div>
+      
+      <!-- Puedes agregar Marrón, Naranja y Grisáceo igual -->
+    </div>
+  </div>
+</section>
+
+<!-- ====== Modal oculto ====== -->
+<div id="flujoModal" class="modal-overlay" style="display:none;">
+  <div class="modal-window">
+    <span class="modal-close">&times;</span>
+    <h3 id="modalTitle"></h3>
+    <img id="modalImg" src="" alt="Imagen del flujo" style="max-width:100%; border-radius:12px; margin-bottom:10px;">
+    <p id="modalDesc"></p>
+  </div>
+</div>
+
+<!-- ====== Estilos ====== -->
+<style>
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .modal-window {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 400px;
+    text-align: center;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  .modal-window.show {
+    transform: scale(1);
+    opacity: 1;
+  }
+  .modal-close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  /* Tarjetas de flujo */
+  .flujo-card {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .flujo-card:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<!-- ====== Script ====== -->
+<script>
+  const flujoCards = document.querySelectorAll(".flujo-card");
+  const modal = document.getElementById("flujoModal");
+  const modalWindow = modal.querySelector(".modal-window");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDesc = document.getElementById("modalDesc");
+  const modalImg = document.getElementById("modalImg");
+  const closeModal = modal.querySelector(".modal-close");
+
+  flujoCards.forEach(card => {
+    card.addEventListener("click", () => {
+      modalTitle.textContent = card.dataset.flujo;
+      modalDesc.textContent = card.dataset.info;
+      modalImg.src = card.dataset.img;  // asigna la imagen correspondiente
+      modal.style.display = "flex";
+      setTimeout(() => modalWindow.classList.add("show"), 10);
+    });
+  });
+
+  closeModal.addEventListener("click", () => {
+    modalWindow.classList.remove("show");
+    setTimeout(() => modal.style.display = "none", 300);
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modalWindow.classList.remove("show");
+      setTimeout(() => modal.style.display = "none", 300);
+    }
+  });
+</script>
+
 
       <!-- AJUSTES -->
       <section class="grid view" id="view-ajustes" style="display:none;">
